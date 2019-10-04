@@ -3,7 +3,7 @@ package phase1.tools;
 import java.awt.event.MouseEvent;
 
 /**
- * 所有工具的接口
+ * Interface for all the tools
 
  */
 public interface Tool {
