@@ -10,8 +10,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import org.json.JSONObject;
 
 public class ServerThread extends Thread{
 	public Socket socket;
@@ -33,7 +32,6 @@ public class ServerThread extends Thread{
 			  //objectout = new ObjectOutputStream(socket.getOutputStream());
 			  
 			  JSONObject JO;
-			  JSONParser parser = new JSONParser();
 			  String action ="";
 			  
 			 
@@ -41,12 +39,12 @@ public class ServerThread extends Thread{
 			  while(true){
 				  //int value=input.read();
 				  String data = input.readUTF();
-				  JO = (JSONObject) parser.parse(data);
+				  JO = new JSONObject(data);
 				  
-				  action = (String) JO.get("Action");
+				  action = JO.getString("Action");
 				  switch(action) {
 				  case "Reply":{
-					  String reply = (String) JO.get("Reply");
+					  String reply = JO.getString("Reply");
 					  ServerThread client = SocketServer.list.get(SocketServer.list.size()-1);
 					  client.output.writeUTF(reply); 
 					  client.output.flush();

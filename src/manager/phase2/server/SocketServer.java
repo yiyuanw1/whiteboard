@@ -26,7 +26,7 @@ public class SocketServer {
 	public DataOutputStream output;
 	public Socket managerSocket;
 	public String managerName;
-	public static Map<String,Socket> map = new HashMap<String,Socket>();
+	public static Map<Socket,String> map = new HashMap<Socket,String>();
 	public static ArrayList<ServerThread> list = new ArrayList<ServerThread>();
 	
 	//public static Map<String,ArrayList<ServerThread>> project = new HashMap<String,ArrayList<ServerThread>>();
@@ -60,7 +60,7 @@ public class SocketServer {
 						managerName = username;
 						ServerThread t = new ServerThread(socket);
 						t.start();
-						map.put(username, socket);
+						map.put(socket, username);
 						list.add(t);
 					}
 				} else { //如果是申请加入“join"					
@@ -68,7 +68,7 @@ public class SocketServer {
 						ServerThread t = new ServerThread(socket);
 						t.start();
 						list.add(t);
-						map.put(username, socket);
+						map.put(socket, username);
 						
 						JO.put("Action", "Join");
 						JO.put("Username", username);
