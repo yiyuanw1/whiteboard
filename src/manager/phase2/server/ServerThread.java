@@ -10,6 +10,9 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 public class ServerThread extends Thread{
 	public Socket socket;
 	public DataInputStream input ;
@@ -28,20 +31,47 @@ public class ServerThread extends Thread{
 			  input=new DataInputStream(socket.getInputStream()); 
 			  output= new DataOutputStream(socket.getOutputStream()); 
 			  //objectout = new ObjectOutputStream(socket.getOutputStream());
+			  
+			  JSONObject JO;
+			  JSONParser parser = new JSONParser();
+			  String action ="";
+			  
 			 
 			
-			while(true){
-				int value=input.read();
+			  while(true){
+				  //int value=input.read();
+				  String data = input.readUTF();
+				  JO = (JSONObject) parser.parse(data);
+				  
+				  action = (String) JO.get("Action");
+				  switch(action) {
+				  case "Reply":{
+					  String reply = (String) JO.get("Reply");
+					  ServerThread client = SocketServer.list.get(SocketServer.list.size()-1);
+					  client.output.writeUTF(reply); 
+					  client.output.flush();
+					  if(!reply.equals("Approve")) {						  					  
+						  SocketServer.list.remove(client);
+						  client.socket.close();
+					  }
 
-				for (int i = 0; i <SocketServer.list.size(); i++) {
-					ServerThread clients =SocketServer.list.get(i);
-					if(clients!=this){
-						clients.output.write(value);
-						clients.output.flush();
-					}
-					
-				}
-			}
+					  break;
+				  }
+				  case "Draw":{
+					  for (int i = 0; i <SocketServer.list.size(); i++) {
+						  ServerThread clients =SocketServer.list.get(i);
+						  if(clients!=this){
+							  clients.output.writeUTF(data);
+							  clients.output.flush();
+						  }
+						
+					  }
+					  break;
+				  }
+				  default:
+					  break;
+				  }
+			  }
 		}catch (SocketException e) {
 			try {
 				SocketServer.list.remove(this);

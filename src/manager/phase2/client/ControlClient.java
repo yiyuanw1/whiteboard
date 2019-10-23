@@ -6,14 +6,17 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
+import org.json.*;
+import javax.swing.JOptionPane;
 
+//import org.json.simple.JSONObject;
+//import org.json.simple.parser.JSONParser;
 public class ControlClient {
 
 	private Socket socket;
 	public int x1,y1,x2,y2,color;
+	public String action;
 	public byte type,strock;
  
 	public Graphics g;
@@ -30,9 +33,51 @@ public class ControlClient {
 				try {
 				while(true){
 
-						DataInputStream dis=new DataInputStream(socket.getInputStream());
-						DataOutputStream dos= new DataOutputStream(socket.getOutputStream());
-						//读图形类型
+					DataInputStream dis=new DataInputStream(socket.getInputStream());
+					DataOutputStream dos= new DataOutputStream(socket.getOutputStream());
+						
+					String inputStr = dis.readUTF();
+						
+					JSONObject JO = new JSONObject(inputStr);
+					//JSONParser parser = new JSONParser();
+					//JO = (JSONObject) parser.parse(inputStr);
+					action = JO.getString("Action");
+					
+					switch(action) {
+					case "Join":{
+						String joiner = JO.getString("Username");
+						int approve = JOptionPane.showConfirmDialog(null, joiner+" want to join.", "New request",JOptionPane.YES_NO_OPTION);
+						JO.put("Action", "Reply");
+						if(approve==0) { //同意加入							
+							JO.put("Reply","Approve");
+							dos.writeUTF(JO.toString());								
+						} else {
+							JO.put("Reply","Refuse to join.");
+							dos.writeUTF(JO.toString());
+						}
+						dos.flush();
+						break;
+					}
+					case "Draw":{
+						int t = JO.getInt("Type");
+						type = (byte) (t&0xff);
+						x1 =   JO.getInt("X1");
+						y1 =  JO.getInt("Y1");
+						x2 =  JO.getInt("X2");
+						y2 =  JO.getInt("Y1");
+						int s = JO.getInt("Strock");
+						strock  = (byte) (s&0xff);
+						color =  JO.getInt("Color");
+						
+						drawGra();
+						break;
+					}
+					
+					default:
+						break;
+					}
+						
+	/*					//读图形类型
 						type=dis.readByte();
 						
 						//读坐标
@@ -45,7 +90,7 @@ public class ControlClient {
 						//读颜色
 						color=dis.readInt();
 						//读完数据之后画图形
-						drawGra();
+						drawGra();  */
 				}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,6 +106,19 @@ public class ControlClient {
 			DataInputStream	dis=new DataInputStream(socket.getInputStream());
 			DataOutputStream dos= new DataOutputStream(socket.getOutputStream());
 			//写图形类型
+			
+			JSONObject JO = new JSONObject();
+			JO.put("Action","Draw");
+			JO.put("Type", type);
+			JO.put("X1", x1);
+			JO.put("X2", x2);
+			JO.put("Y1", y1);
+			JO.put("Y2", y2);
+			JO.put("Strock", strock);
+			JO.put("Color", g.getColor().getRGB());
+			
+			dos.writeUTF(JO.toString());
+			/*
 			dos.writeByte(type);
 			//写坐标
 			dos.writeInt(x1);
@@ -71,6 +129,7 @@ public class ControlClient {
 			dos.writeByte(strock);
 			//写颜色
 			dos.writeInt(g.getColor().getRGB());
+			*/
 			dos.flush();
 		} catch (Exception e) {
 			e.printStackTrace();

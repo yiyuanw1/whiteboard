@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src/manager"/>
-	<classpathentry excluding="manager/" kind="src" path="src"/>
 	<classpathentry kind="lib" path="E:/comp90015-whiteboard/lib/json-20190722.jar"/>
+	<classpathentry kind="lib" path="E:/comp90015-whiteboard/lib/json-simple-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

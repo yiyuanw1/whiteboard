@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.net.ServerSocketFactory;
-
+import org.json.*;
 import phase1.Canvas;
 
 public class SocketServer {
@@ -28,6 +28,7 @@ public class SocketServer {
 	public String managerName;
 	public static Map<String,Socket> map = new HashMap<String,Socket>();
 	public static ArrayList<ServerThread> list = new ArrayList<ServerThread>();
+	
 	//public static Map<String,ArrayList<ServerThread>> project = new HashMap<String,ArrayList<ServerThread>>();
 	
 	public void startServer() {
@@ -41,6 +42,8 @@ public class SocketServer {
 				input = new DataInputStream(socket.getInputStream());
 				output = new DataOutputStream(socket.getOutputStream());
 				
+				JSONObject JO = new JSONObject();
+
 				String username = input.readUTF();
 				String creator = input.readUTF();
 				//creator or joiner
@@ -62,28 +65,40 @@ public class SocketServer {
 					}
 				} else { //如果是申请加入“join"					
 					if(!list.isEmpty()) { // 申请加入项目
-						//manager = map.get(manager);
-						// 若同意加入 =======
-						System.out.println(username + " join the white board... ");
-						output.writeUTF("Approve");
 						ServerThread t = new ServerThread(socket);
 						t.start();
 						list.add(t);
 						map.put(username, socket);
-						//project.get(username).add(t);
+						
+						JO.put("Action", "Join");
+						JO.put("Username", username);
+						
+						DataOutputStream toManager = new DataOutputStream(managerSocket.getOutputStream());
+						toManager.writeUTF(JO.toString());
+						toManager.flush();
+							
+		/*				if(reply.equals("Approve")) {		// 若同意加入 =======
+							System.out.println(username + " join the white board... ");
+							output.writeUTF("Approve");
+							ServerThread t = new ServerThread(socket);
+							t.start();
+							list.add(t);
+							map.put(username, socket);					
+						} else { // 若不同意
+							output.writeUTF("Refuse to join.");
+							socket.close();
+						}*/
 					} else {// 不存在项目
 						output.writeUTF("Not found");
 						socket.close();
 					}										
 				} 
 				output.flush();
-/*				ServerThread t = new ServerThread(socket);
-				t.start();
-				list.add(t);*/
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
   
 	}
+	
 }
