@@ -8,7 +8,6 @@ import java.awt.event.MouseEvent;
  */
 public interface Tool {
 
-
     public static final String FREE_TOOL = "FreeTool";
     public static final String ERASER_TOOL = "EraserTool";
     public static final String LINE_TOOL = "LineTool";
@@ -31,4 +30,6 @@ public interface Tool {
 
 
     public void mouseClicked(MouseEvent e);
+    
+    public void receiveData();
 }

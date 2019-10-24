@@ -20,7 +20,7 @@ import static phase1.tools.Tool.*;
 
 public class Canvas extends JFrame {
 
-	private Socket clientsocket;
+	public static Socket clientsocket;
 	
 	private ImageService service = new ImageService();
 
@@ -67,9 +67,8 @@ public class Canvas extends JFrame {
     public void initCanvas() {
         this.setTitle("Shared Whiteboard - HONE");
         service.initPaintingSpace(this);
-        tool = ToolInstances.getToolInstance(this, FREE_TOOL);
+        tool = ToolInstances.getToolInstance(this, FREE_TOOL, clientsocket);
         
-        ControlClient cc = new ControlClient(g,clientsocket);
 
         MouseMotionListener mouseMotionListener = new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent e) {
@@ -79,7 +78,6 @@ public class Canvas extends JFrame {
             public void mouseMoved(MouseEvent e) {
                 tool.mouseMoved(e);
             }
-
         };
         MouseListener mouseListener = new MouseAdapter() {
             public void mouseReleased(MouseEvent e) {
@@ -107,6 +105,7 @@ public class Canvas extends JFrame {
         this.add(toolsPanel, BorderLayout.WEST);
         this.add(colorsPanel, BorderLayout.SOUTH);
         this.add(chatBoard,BorderLayout.EAST);
+        tool.receiveData();
     }
 
 

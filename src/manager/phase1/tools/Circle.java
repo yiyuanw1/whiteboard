@@ -3,17 +3,19 @@ package phase1.tools;
 import phase1.Canvas;
 
 import java.awt.*;
+import java.net.Socket;
 
 public class Circle extends AbstractTool {
     private static Tool tool = null;
-
-    private Circle(Canvas frame) {
-        super(frame);
+    private String shape = "Circle";
+    private Circle(Canvas frame,Socket s) {
+        super(frame,s);
+        this.setShape(shape);
     }
 
-    public static Tool getInstance(Canvas frame) {
+    public static Tool getInstance(Canvas frame, Socket s) {
         if (tool == null) {
-            tool = new Circle(frame);
+            tool = new Circle(frame,s);
         }
         return tool;
     }
@@ -28,7 +30,6 @@ public class Circle extends AbstractTool {
         }else{
             g.drawOval(x, y, Math.abs(y1 - y2), Math.abs(y1 - y2));
         }
-
 
     }
 }

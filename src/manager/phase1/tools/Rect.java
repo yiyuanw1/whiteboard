@@ -3,17 +3,19 @@ package phase1.tools;
 import phase1.Canvas;
 
 import java.awt.*;
+import java.net.Socket;
 
 public class Rect extends AbstractTool {
     private static Tool tool = null;
-
-    private Rect(Canvas frame) {
-        super(frame);
+    private String shape = "Rect";
+    private Rect(Canvas frame,Socket s) {
+        super(frame,s);
+        this.setShape(shape);
     }
 
-    public static Tool getInstance(Canvas frame) {
+    public static Tool getInstance(Canvas frame,Socket s) {
         if (tool == null) {
-            tool = new Rect(frame);
+            tool = new Rect(frame,s);
         }
         return tool;
     }
@@ -23,5 +25,7 @@ public class Rect extends AbstractTool {
         int x = Math.min(x2, x1);
         int y = Math.min(y2, y1);
         g.drawRect(x, y, Math.abs(x1 - x2), Math.abs(y1 - y2));
+        System.out.printf("%d,%d,%d,%d\n",x1,y1,x2,y2);
+
     }
 }

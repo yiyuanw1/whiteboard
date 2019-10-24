@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 
 import org.json.JSONObject;
 
@@ -16,6 +17,7 @@ public class ServerThread extends Thread{
 	public Socket socket;
 	public DataInputStream input ;
 	public DataOutputStream output;
+	public static ArrayList<String> previousgraph = new ArrayList<String>();
 	//public ObjectOutputStream objectout;
 	public Graphics g;
 	
@@ -38,9 +40,9 @@ public class ServerThread extends Thread{
 			
 			  while(true){
 				  //int value=input.read();
+
 				  String data = input.readUTF();
 				  JO = new JSONObject(data);
-				  
 				  action = JO.getString("Action");
 				  switch(action) {
 				  case "Reply":{
@@ -48,14 +50,20 @@ public class ServerThread extends Thread{
 					  ServerThread client = SocketServer.list.get(SocketServer.list.size()-1);
 					  client.output.writeUTF(reply); 
 					  client.output.flush();
-					  if(!reply.equals("Approve")) {						  					  
+					  if(!reply.equals("Approve")) {		//close socket				  					  
 						  SocketServer.list.remove(client);
 						  client.socket.close();
+					  }else {  //send previous graph
+						  for(int i = 0; i < previousgraph.size();i++) {
+							  client.output.writeUTF(previousgraph.get(i));
+							  client.output.flush();
+						  }
 					  }
 
 					  break;
 				  }
 				  case "Draw":{
+					  previousgraph.add(data);
 					  for (int i = 0; i <SocketServer.list.size(); i++) {
 						  ServerThread clients =SocketServer.list.get(i);
 						  if(clients!=this){
@@ -73,6 +81,7 @@ public class ServerThread extends Thread{
 		}catch (SocketException e) {
 			try {
 				SocketServer.list.remove(this);
+				SocketServer.map.remove(socket);
 				this.socket.close();
 				System.out.println("client quit......");
 			} catch (IOException e1) {

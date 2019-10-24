@@ -4,18 +4,20 @@ import phase1.Canvas;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.net.Socket;
 
 
 public class Eraser extends AbstractTool {
     private static Tool tool = null;
-
-    private Eraser(Canvas frame) {
-        super(frame, "resource/erasercursor.gif");
+    private String shape = "Eraser";
+    private Eraser(Canvas frame,Socket s) {
+        super(frame, "resource/erasercursor.gif",s);
+        this.setShape(shape);
     }
 
-    public static Tool getInstance(Canvas frame) {
+    public static Tool getInstance(Canvas frame, Socket s) {
         if (tool == null) {
-            tool = new Eraser(frame);
+            tool = new Eraser(frame, s);
         }
         return tool;
     }
@@ -33,7 +35,7 @@ public class Eraser extends AbstractTool {
             y = ((e.getY() - getY()) > 0) ? getY() : e.getY();
             g.fillRect(x, y, Math.abs(e.getX() - getX())
                     + size, Math.abs(e.getY() - getY()) + size);
-
+            sendData(getX(), getY(), e.getX(), e.getY(),shape,color,"");
             setX(e.getX());
             setY(e.getY());
             getFrame().getPaintingSpace().repaint();

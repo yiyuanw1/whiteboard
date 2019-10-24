@@ -8,6 +8,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 import org.json.*;
+
+import phase1.tools.Tool;
+
 import javax.swing.JOptionPane;
 
 //import org.json.simple.JSONObject;
@@ -18,12 +21,14 @@ public class ControlClient {
 	public int x1,y1,x2,y2,color;
 	public String action;
 	public byte type,strock;
+	public Tool tool;
  
 	public Graphics g;
 	
 	public ControlClient(Graphics g,Socket socket) {
 		this.g=g;
 		this.socket=socket;
+		this.tool = tool;
 	}
  
 	//不断接受服务器发送过来的信息
@@ -70,6 +75,11 @@ public class ControlClient {
 						color =  JO.getInt("Color");
 						
 						drawGra();
+						break;
+					}
+					case "Quit":{
+						String name = JO.getString("Username");
+						JOptionPane.showMessageDialog(null, name+" quit." , "Message",JOptionPane.PLAIN_MESSAGE); 
 						break;
 					}
 					

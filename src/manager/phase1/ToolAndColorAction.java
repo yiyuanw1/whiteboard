@@ -30,7 +30,7 @@ public class ToolAndColorAction extends AbstractAction {
 
 
     public void actionPerformed(ActionEvent e) {
-        tool = (name != "") ? ToolInstances.getToolInstance(canvas, name) : tool;
+        tool = (name != "") ? ToolInstances.getToolInstance(canvas, name, Canvas.clientsocket) : tool;
         if (tool != null) {
             canvas.setTool(tool);
         }
