@@ -21,6 +21,7 @@ import static phase1.tools.Tool.*;
 public class Canvas extends JFrame {
 
 	public static Socket clientsocket;
+	public static String username;
 	
 	private ImageService service = new ImageService();
 
@@ -48,14 +49,15 @@ public class Canvas extends JFrame {
 
     JPanel toolsPanel = createToolsPanel();
 
-    JPanel colorsPanel = createColorsPanel();
+    JPanel colorsPanel = createColorsPanel();    
 
-    ChatBoard chatBoard = new ChatBoard((int) screenSize.getHeight() / 4, (int) screenSize.getHeight() / 2);
-
-
-    public Canvas(Socket s) {
+    public ChatBoard chatBoard;
+    
+    public Canvas(Socket s, String username) {
         super();
-        this.clientsocket = s;
+        Canvas.clientsocket = s;
+        this.username = username;
+        chatBoard = new ChatBoard((int) screenSize.getHeight() / 4, (int) screenSize.getHeight() / 2,username);
         initCanvas();
     }
 
@@ -68,7 +70,7 @@ public class Canvas extends JFrame {
         this.setTitle("Shared Whiteboard - HONE");
         service.initPaintingSpace(this);
         tool = ToolInstances.getToolInstance(this, FREE_TOOL, clientsocket);
-        
+        chatBoard.setSocket(clientsocket);
 
         MouseMotionListener mouseMotionListener = new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent e) {

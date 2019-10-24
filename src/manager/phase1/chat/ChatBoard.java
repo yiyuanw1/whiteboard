@@ -3,16 +3,22 @@ package phase1.chat;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
+
+import org.json.JSONObject;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 
 public class ChatBoard extends JPanel{
 
     private static final long serialVersionUID = 1L;
 
     // components for chat
-    private JTextArea chatWindow;
+    public JTextArea chatWindow;
     private JTextArea outMessage;
     private JButton btnSend;
 
@@ -20,9 +26,14 @@ public class ChatBoard extends JPanel{
 
     private String text;
 
-    public ChatBoard(int width, int height) {
+    private Socket client;
+    public DataOutputStream output;
+    public String username;
+    
+    public ChatBoard(int width, int height, String n) {
         size = new Dimension(width, height);
         setLayout(new BorderLayout(0, 0));
+        this.username = n;
         initialize();
     }
 
@@ -52,13 +63,33 @@ public class ChatBoard extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 text = new String(outMessage.getText());
-                chatWindow.append(text+"\n");
+                chatWindow.append("Me: "+text+"\n");
                 outMessage.setText("");
+                JSONObject JO = new JSONObject();
+                JO.put("Action", "Chat");
+                JO.put("Message", text);
+                JO.put("Username", username);
+                try {               	
+					output.writeUTF(JO.toString());
+					output.flush();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
             }
 
         });
         sendingMessage.add(btnSend, BorderLayout.EAST);
     }
 
+    public void setSocket(Socket client) {
+    	this.client = client;
+    	try {
+			output= new DataOutputStream(this.client.getOutputStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 }
 

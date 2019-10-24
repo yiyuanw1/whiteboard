@@ -10,14 +10,18 @@ import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
 
+import org.json.JSONObject;
+
 import phase2.client.ClientUI;
 
 public class TestJoinMain {
 	public static void main(String[] args)  
 	{
 		try {
-			String username = "John";
-			Socket socket = new Socket("localhost",9090);
+			String username = "John"; //arg[2]
+			String ip ="localhost"; //arg[0]
+			int port = 9090; //arg[1]
+			Socket socket = new Socket(ip,port);
 			DataInputStream input=new DataInputStream(socket.getInputStream()); 
 			DataOutputStream output= new DataOutputStream(socket.getOutputStream()); 
 			if(socket!=null) {
@@ -28,7 +32,7 @@ public class TestJoinMain {
 				String message = input.readUTF();
 				JOptionPane.showMessageDialog(null, message , "Message",JOptionPane.PLAIN_MESSAGE); 
 				if(message.equals("Approve")) { 
-			        Canvas f = new Canvas(socket);
+			        Canvas f = new Canvas(socket, username);
 			        f.pack();
 			        f.setVisible(true);
 
@@ -38,6 +42,16 @@ public class TestJoinMain {
 
 			                f.getService().save(false,f);
 			                e.getWindow().dispose();
+			                JSONObject JO = new JSONObject();
+			                JO.put("Action", "Quit");
+			                JO.put("Username", username);
+			                try {
+								output.writeUTF(JO.toString());
+								output.flush();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}				         
 			            }
 			        });
 				}

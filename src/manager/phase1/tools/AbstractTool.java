@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -251,7 +252,17 @@ public abstract class AbstractTool implements Tool {
 					}
 					case "Quit":{
 						String name = JO.getString("Username");
-						JOptionPane.showMessageDialog(null, name+" quit." , "Message",JOptionPane.PLAIN_MESSAGE); 
+						frame.chatBoard.chatWindow.append(name+" exited the project\n");
+						if(name.equals(Canvas.username)) {
+							socket.close();
+						}
+						break;
+					}
+					case "Chat":{
+						String name = JO.getString("Username");
+						String text = JO.getString("Message");
+						frame.chatBoard.chatWindow.append(name+": "+text+"\n");
+						System.out.print(inputStr);
 						break;
 					}
 					
@@ -260,7 +271,7 @@ public abstract class AbstractTool implements Tool {
 					}
 					
 				}
-				} catch (Exception e) {
+				} catch (Exception e) {							
 					e.printStackTrace();
 				}
 			};

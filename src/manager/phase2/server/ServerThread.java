@@ -69,9 +69,32 @@ public class ServerThread extends Thread{
 						  if(clients!=this){
 							  clients.output.writeUTF(data);
 							  clients.output.flush();
-						  }
-						
+						  }						
 					  }
+					  break;
+				  }
+				  case "Chat":{
+					  for (int i = 0; i <SocketServer.list.size(); i++) {
+						  ServerThread clients =SocketServer.list.get(i);
+						  if(clients!=this){
+							  clients.output.writeUTF(data);
+							  clients.output.flush();
+						  }
+					  }
+					  break;
+				  }
+				  case "Quit":{
+					  for (int i = 0; i <SocketServer.list.size(); i++) {
+						  ServerThread clients =SocketServer.list.get(i);
+						  clients.output.writeUTF(data);
+						  clients.output.flush();						  
+					  }
+					  System.out.println("client:" +SocketServer.map.get(socket)+" quit......");
+					  SocketServer.list.remove(this);
+					  SocketServer.map.remove(socket);
+					  this.socket.close();
+					  
+					  
 					  break;
 				  }
 				  default:
@@ -82,8 +105,7 @@ public class ServerThread extends Thread{
 			try {
 				SocketServer.list.remove(this);
 				SocketServer.map.remove(socket);
-				this.socket.close();
-				System.out.println("client quit......");
+				this.socket.close();				
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
