@@ -1,11 +1,14 @@
-package GUI;
+package management;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+
+import GUI.Canvas;
 
 public class ManagerCanvas extends Canvas implements ActionListener{
 

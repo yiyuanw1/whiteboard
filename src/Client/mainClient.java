@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import Exception.ClientException;
 import GUI.Canvas;
 import GUI.ClientLoginPage;
+import management.UserPool;
 
 /**
  * @author sxy
@@ -60,6 +61,7 @@ public class mainClient {
 
 							clientStart = new ClientStart(serverIP, serverPort, userName);
 							Notconnected = false;
+							UserPool.newUser(userName);
 						}catch(IOException | IllegalArgumentException | ClientException e) {
 							Notconnected = true;
 							JOptionPane.showMessageDialog(null, "Cannot connect to the server, check your IP or port.");

@@ -1,4 +1,4 @@
-package GUI;
+package management;
 
 public interface ManagerListener {
 

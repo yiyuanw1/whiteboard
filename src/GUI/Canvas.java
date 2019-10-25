@@ -31,7 +31,7 @@ public class Canvas extends JFrame {
     //added
     public int msgAnswer;
 
-    ActionListener menuListener = new ActionListener() {
+    protected ActionListener menuListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
             service.menuFunctions(Canvas.this, e.getActionCommand());
         }
@@ -97,6 +97,7 @@ public class Canvas extends JFrame {
         paintingSpace.addMouseListener(mouseListener);
         paintingSpace.addMouseWheelListener(mouseWheelListener);
 
+        this.setJMenuBar(this.createMenuBar());
         scroll = new JScrollPane(paintingSpace);
         ImageService.setViewport(scroll, paintingSpace, bufferedImage.getWidth(),
                 bufferedImage.getHeight());
@@ -137,7 +138,21 @@ public class Canvas extends JFrame {
         return this.tool;
     }
 
+    public JMenuBar createMenuBar() {
 
+        JMenuBar menuBar = new JMenuBar();
+		JMenu menu = new JMenu("Management");
+		JMenuItem item = new JMenuItem("Show Clients");
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				showUserList();
+			}
+		});
+		menu.add(item);
+		menuBar.add(menu);
+		return menuBar;
+    }
 
     public JPanel createColorsPanel() {
         JPanel panel = new JPanel();
@@ -190,17 +205,6 @@ public class Canvas extends JFrame {
             toolBar.add(button);
 
         }
-        
-        /*JButton button = new JButton(new ImageIcon("resoruce/color.jpg"));
-        button.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				(new ColorFrame()).setVisible(true);
-			}
-        	
-        });
-        toolBar.add(button);*/
         panel.add(toolBar);
         return panel;
     }
@@ -219,4 +223,7 @@ public class Canvas extends JFrame {
 		return chatBoard;
 	}
 
+	public void showUserList() {
+		(new UserListFrame()).setVisible(true);
+	}
 }

@@ -19,7 +19,8 @@ import org.json.JSONObject;
 import Exception.ClientException;
 import Exception.ServerException;
 import GUI.Canvas;
-import GUI.ManagerCanvas;
+import management.ManagerCanvas;
+import management.UserPool;
 import GUI.ServerLoginPage;
 import ThreadPool.SocketThreadPipeStructure;
 
@@ -63,6 +64,8 @@ public static void main(String[] args) {
 	f.initCanvas();
     f.pack();
     f.setVisible(true);
+    new UserPool();
+    UserPool.newUser(userName + "(manager)");
     
 	try {
 		IP = InetAddress.getByName(IPS);
@@ -71,10 +74,7 @@ public static void main(String[] args) {
 	} catch (ServerException | IOException | InterruptedException e2) {
 		System.out.println(e2.getMessage());
 	}
-		
-    
-   
-
+	
     f.addWindowListener(new WindowAdapter() {
         @Override
         public void windowClosing(WindowEvent e) {

@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import Exception.ServerException;
 import ThreadPool.SocketThreadPipeStructure;
+import management.UserPool;
 
 /**
  * @author sxy
@@ -115,7 +116,7 @@ public class WhiteBoardServer {
 								String IPClient = cbufJSON.getString("IP");
 								ServerListeningSocketThread.threadMaster.get(index).setUserName(userName);
 								ServerListeningSocketThread.threadMaster.get(index).setIP(IPClient);
-								ServerListeningSocketThread.threadMaster.notifyAdd(userName);
+								UserPool.notifyAdd(userName);
 								
 								JSONObject successfulJobj = new JSONObject();
 								successfulJobj.put("Action", "successful");
@@ -219,7 +220,7 @@ public class WhiteBoardServer {
 									
 									//鍏抽棴socket
 									skt.close();
-									ServerListeningSocketThread.threadMaster.notifyQuit(userName);
+									UserPool.notifyQuit(userName);
 									//shutdown Thread
 									try {
 										stps.getThread().interrupt();
