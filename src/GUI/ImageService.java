@@ -10,10 +10,10 @@ import java.io.IOException;
 
 public class ImageService {
 	
-	//禁止所有可选文件，并添加可选文件的扩展名
+	//绂佹鎵�鏈夊彲閫夋枃浠讹紝骞舵坊鍔犲彲閫夋枃浠剁殑鎵╁睍鍚�
     private FileChooser fileChooser = new FileChooser();
 
-    //获取屏幕尺寸(Dimension)
+    //鑾峰彇灞忓箷灏哄(Dimension)
     public Dimension getScreenSize() {
         Toolkit dt = Toolkit.getDefaultToolkit();
         return dt.getScreenSize();
@@ -147,6 +147,9 @@ public class ImageService {
             // Reset viewport
             ImageService.setViewport(frame.getScroll(), frame.getPaintingSpace(), w, h);
             myImage.setIsSaved(false);
+            
+            frame.getBufferedImage().setSavedFileName(file.getAbsolutePath());
+            System.out.print(file.getAbsolutePath()+"\n");
         }
     }
 
@@ -192,7 +195,7 @@ public class ImageService {
         }
 
         if (cmd.equals("Save")) {
-            if(frame.getBufferedImage().isSaved()){
+            if(!frame.getBufferedImage().getSavedFileName().equals("")){
                 save(frame);
             }else{
                 saveAs(true,frame);

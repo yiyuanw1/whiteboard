@@ -50,7 +50,7 @@ public class WhiteBoardServer {
 		public WhiteBoardServer(String name, InetAddress IP, int port, int bl) throws ServerException, IOException, InterruptedException {
 			
 			this.serverIP = IP;
-			this.serverPort = 9000;
+			this.serverPort = port;
 			this.serverName = name;
 			this.backlog = bl;
 			

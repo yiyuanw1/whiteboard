@@ -10,6 +10,7 @@ import javax.swing.event.ChangeListener;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import javax.swing.SwingConstants;
 
 public class ColorFrame extends JFrame{
 	
@@ -18,8 +19,10 @@ public class ColorFrame extends JFrame{
 	
 	Color color;
 	JPanel colorBoard;
+	public int sRGB[] = new int[4];
 
 	public ColorFrame() {
+		this.setTitle("color panel");
 		this.color = AbstractTool.color;
 		init();
 	}
@@ -57,6 +60,7 @@ public class ColorFrame extends JFrame{
 		JPanel panel = new JPanel(new BorderLayout(0,0));
 		JLabel label = new JLabel(ColorFrame.colors[index]);
 		JTextField value = new JTextField();
+		value.setHorizontalAlignment(SwingConstants.TRAILING);
 		value.setText(" 255 ");
 		JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, MAX_COLOR, 255);
 		slider.setPaintTrack(false);

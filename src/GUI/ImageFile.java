@@ -3,26 +3,26 @@ import java.awt.image.BufferedImage;
 
 public class ImageFile extends BufferedImage {
     private boolean isSaved = true;
-    private String filename = null;
+    private String filename = "";
 
-    //提取图像，第二个函数？
+    //鎻愬彇鍥惧儚锛岀浜屼釜鍑芥暟锛�
     public ImageFile(int width, int height, int type) {
         super(width, height, type);
         this.getGraphics().fillRect(0, 0, width, height);
     }
-    //！设定！存储图像的文件名字
+    //锛佽瀹氾紒瀛樺偍鍥惧儚鐨勬枃浠跺悕瀛�
     public void setSavedFileName(String fileName){
         this.filename = fileName;
     }
-    //！返回！存储图像的文件名字
+    //锛佽繑鍥烇紒瀛樺偍鍥惧儚鐨勬枃浠跺悕瀛�
     public String getSavedFileName() {
         return this.filename;
     }
-    //！设置！是否存储，默认为true
+    //锛佽缃紒鏄惁瀛樺偍锛岄粯璁や负true
     public void setIsSaved(boolean b) {
         this.isSaved = b;
     }
-    //！返回！是否存储
+    //锛佽繑鍥烇紒鏄惁瀛樺偍
     public boolean isSaved() {
         return this.isSaved;
     }

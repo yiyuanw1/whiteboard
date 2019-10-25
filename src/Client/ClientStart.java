@@ -5,6 +5,7 @@ package Client;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import Exception.ClientException;
@@ -28,13 +29,14 @@ public class ClientStart {
 		serverIP = IP;
 		serverPort = port;
 		userName = name;
-		//！！！需要更多的判断！！！
+		//锛侊紒锛侀渶瑕佹洿澶氱殑鍒ゆ柇锛侊紒锛�
 		if ( serverPort == 0)  throw new ClientException("The port could not be 0, please enter another number.");
 		
-		//生成新的socket
+		//鐢熸垚鏂扮殑socket
+		(new Socket()).connect(new InetSocketAddress(IP, port), 2000);
 		clientSocket = new Socket(serverIP, serverPort);
 		
-		//分配socket一个thread
+		//鍒嗛厤socket涓�涓猼hread
 		clientSocketThread = new ClientSocketThread(clientSocket, userName);
 		clientSocketThread.start();
 		

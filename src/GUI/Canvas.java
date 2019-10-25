@@ -191,7 +191,7 @@ public class Canvas extends JFrame {
 
         }
         
-        JButton button = new JButton(new ImageIcon("resoruce/color.jpg"));
+        /*JButton button = new JButton(new ImageIcon("resoruce/color.jpg"));
         button.addActionListener(new ActionListener() {
 
 			@Override
@@ -200,7 +200,7 @@ public class Canvas extends JFrame {
 			}
         	
         });
-        toolBar.add(button);
+        toolBar.add(button);*/
         panel.add(toolBar);
         return panel;
     }

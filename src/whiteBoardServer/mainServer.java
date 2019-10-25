@@ -20,6 +20,7 @@ import Exception.ClientException;
 import Exception.ServerException;
 import GUI.Canvas;
 import GUI.ManagerCanvas;
+import GUI.ServerLoginPage;
 import ThreadPool.SocketThreadPipeStructure;
 
 /**
@@ -33,21 +34,40 @@ public class mainServer {
 	public static String userName;
 	public static InetAddress IP;
 	public static ArrayList<JSONObject> graphArrayList = new ArrayList<JSONObject>();
+	public static ServerLoginPage login;
+	public static int port;
+	public static Object loginLock = new Object();
+	
+	private static String IPS;
+	private static String portS;
 
 public static void main(String[] args) {
-    
+	
+	login = new ServerLoginPage();
+	login.pack();
+
+	synchronized(loginLock) {
+		try {
+			while(login.getLoginIp() == null &&  login.getLoginPort() == null && login.getLoginName() == null) {
+				loginLock.wait();
+				IPS = login.getLoginIp();
+				portS = login.getLoginPort();
+				userName = login.getLoginName();
+			}
+		} catch (InterruptedException e1) {
+			System.out.println(e1.getMessage());
+		}
+	}
+
 	f = new ManagerCanvas();
 	f.initCanvas();
     f.pack();
     f.setVisible(true);
     
-    
-    
-    
 	try {
-	    userName = "master";
-		IP = InetAddress.getByName("127.0.0.1");
-		wbs = new WhiteBoardServer(userName, IP, 9000, 10);
+		IP = InetAddress.getByName(IPS);
+		port = Integer.parseInt(portS);
+		wbs = new WhiteBoardServer(userName, IP, port, 10);
 	} catch (ServerException | IOException | InterruptedException e2) {
 		System.out.println(e2.getMessage());
 	}
