@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="src/manager"/>
-	<classpathentry kind="lib" path="E:/comp90015-whiteboard/lib/json-20190722.jar"/>
-	<classpathentry kind="lib" path="E:/comp90015-whiteboard/lib/json-simple-1.1.jar"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="jason/json-20190722.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
