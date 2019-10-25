@@ -3,8 +3,10 @@
  */
 package Client;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -89,6 +91,9 @@ public class ClientSocketThread extends Thread {
 						case "draw" :{
 							if(mainClient.f == null) break;
 							String shape = messageFromServerObj.getString("shape");
+							Graphics g = mainClient.f.getBufferedImage().getGraphics();
+							int thick = messageFromServerObj.getInt("thick");
+							((Graphics2D) g).setStroke(new BasicStroke(thick));
 							switch(shape) {
 								case "Circle":{
 									int x0 = messageFromServerObj.getInt("x0");
@@ -97,7 +102,6 @@ public class ClientSocketThread extends Thread {
 									int y1 = messageFromServerObj.getInt("y1");
 									int colorHashcode = messageFromServerObj.getInt("color");
 									
-									Graphics g = mainClient.f.getBufferedImage().getGraphics();
 									g.setColor(new Color(colorHashcode));
 
 							        int radius = Math.min(Math.abs(x0-x1), Math.abs(y0-y1));
@@ -116,7 +120,6 @@ public class ClientSocketThread extends Thread {
 									int y1 = messageFromServerObj.getInt("y1");
 									int colorHashcode = messageFromServerObj.getInt("color");
 
-									Graphics g = mainClient.f.getBufferedImage().getGraphics();
 									g.setColor(new Color(colorHashcode));
 									
 									int x = Math.min(x1, x0);
@@ -134,7 +137,6 @@ public class ClientSocketThread extends Thread {
 									String text = messageFromServerObj.getString("text");
 									int colorHashcode = messageFromServerObj.getInt("color");
 									
-									Graphics g = mainClient.f.getBufferedImage().getGraphics();
 									g.setColor(new Color(colorHashcode));
 									
 									g.drawString(text, x0, y0);
@@ -150,7 +152,6 @@ public class ClientSocketThread extends Thread {
 									int y1 = messageFromServerObj.getInt("y1");
 									int colorHashcode = messageFromServerObj.getInt("color");
 									
-									Graphics g = mainClient.f.getBufferedImage().getGraphics();
 									g.setColor(new Color(colorHashcode));
 									
 									int x = Math.min(x1, x0);
@@ -169,7 +170,6 @@ public class ClientSocketThread extends Thread {
 									int y1 = messageFromServerObj.getInt("y1");
 									int colorHashcode = messageFromServerObj.getInt("color");
 									
-									Graphics g = mainClient.f.getBufferedImage().getGraphics();
 									g.setColor(new Color(colorHashcode));
 									
 									g.drawLine(x0, y0, x1, y1);
@@ -185,7 +185,6 @@ public class ClientSocketThread extends Thread {
 									int y1 = messageFromServerObj.getInt("y1");
 									int colorHashcode = messageFromServerObj.getInt("color");
 									
-									Graphics g = mainClient.f.getBufferedImage().getGraphics();
 									g.setColor(new Color(colorHashcode));
 									
 									g.drawLine(x0, y0, x1, y1);
@@ -204,10 +203,10 @@ public class ClientSocketThread extends Thread {
 										int size = messageFromServerObj.getInt("size");
 										int colorHashcode = messageFromServerObj.getInt("color");
 
-										Graphics g = mainClient.f.getBufferedImage().getGraphics();
 										g.setColor(new Color(colorHashcode));
-										
-							            g.fillRect(x, y, Math.abs(x1 - x0) + size, Math.abs(y1 - y0) + size);
+
+							            g.drawLine(x0, y0, x1,y1);
+							            
 							            mainClient.f.getPaintingSpace().repaint();
 									}else {
 										break;

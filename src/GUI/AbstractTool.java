@@ -47,13 +47,9 @@ public abstract class AbstractTool implements Tool {
         this.defaultCursor = ImageService.createCursor(icon);
     }
 
-
     public Canvas getFrame() {
         return this.frame;
     }
-
-
-
 
     public void setX(int x) {
         this.pressX = x;
@@ -75,7 +71,6 @@ public abstract class AbstractTool implements Tool {
     public void mouseDragged(MouseEvent e) {
 
         Graphics g = getFrame().getPaintingSpace().getGraphics();
-    	((Graphics2D) g).setStroke(new BasicStroke(thick));
         createShape(e, g);
 
     }
@@ -120,6 +115,7 @@ public abstract class AbstractTool implements Tool {
         releaseObj.put("x1", e.getX());
         releaseObj.put("y1", e.getY());
         releaseObj.put("color", g.getColor().hashCode());
+        releaseObj.put("thick",thick);
         String circleS = releaseObj.toString();
         
         if(!shape.equals("Eraser"))
@@ -204,15 +200,13 @@ public abstract class AbstractTool implements Tool {
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
     	int rotation = e.getWheelRotation();
-		if( rotation <= 1 ) {
+		if( rotation < 0 ) {
 			thick += 1;
 		}
-		else if( rotation > 1 ){
-			thick -= 1;
+		else if( rotation > 0 ){
+			thick = (thick > 1) ? thick - 1:thick/2;
 		}
-		else {
-		}
-
+		((Graphics2D) frame.getPaintingSpace().getGraphics()).setStroke(new BasicStroke(thick));
     }
 
     public void draw(Graphics g, int x1, int y1, int x2, int y2) { }

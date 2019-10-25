@@ -80,10 +80,21 @@ public class Canvas extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 tool.mouseClicked(e);
             }
+            
+        };
+        
+        MouseWheelListener mouseWheelListener = new MouseWheelListener() {
+
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				tool.mouseWheelMoved(e);
+			}
+        	
         };
 
         paintingSpace.addMouseMotionListener(mouseMotionListener);
         paintingSpace.addMouseListener(mouseListener);
+        paintingSpace.addMouseWheelListener(mouseWheelListener);
 
         this.setJMenuBar(createMenuBar());
         scroll = new JScrollPane(paintingSpace);

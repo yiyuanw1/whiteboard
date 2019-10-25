@@ -9,6 +9,7 @@ import java.net.Socket;
 
 import org.json.JSONObject;
 
+import Client.mainClient;
 import ThreadPool.SocketThreadPipeStructure;
 import whiteBoardServer.ServerListeningSocketThread;
 import whiteBoardServer.mainServer;
@@ -31,16 +32,14 @@ public class Eraser extends AbstractTool {
     public void mouseDragged(MouseEvent e) {
         super.mouseDragged(e);
         Graphics g = getFrame().getBufferedImage().getGraphics();
+        ((Graphics2D) g).setStroke(new BasicStroke(thick));
         int x = 0;
         int y = 0;
 
         int size = 6;
         if (e.getX() > 0 && e.getY() > 0) {
             g.setColor(Color.WHITE);
-            x = ((e.getX() - getX()) > 0) ? getX() : e.getX();
-            y = ((e.getY() - getY()) > 0) ? getY() : e.getY();
-            g.fillRect(x, y, Math.abs(e.getX() - getX())
-                    + size, Math.abs(e.getY() - getY()) + size);
+            g.drawLine(getX(), getY(), e.getX(), e.getY());
             
             
             //插入到此
@@ -55,6 +54,7 @@ public class Eraser extends AbstractTool {
             EraserObj.put("size", size);
             EraserObj.put("shape", "Eraser");
             EraserObj.put("color", g.getColor().hashCode());
+            EraserObj.put("thick", thick);
             String EraserS = EraserObj.toString();
             
             
@@ -66,23 +66,35 @@ public class Eraser extends AbstractTool {
             
             //发给别人
     		//迭代每个socket
-    		for(int i = 0; i < ServerListeningSocketThread.threadMaster.size(); i++) {
-    			SocketThreadPipeStructure stps = ServerListeningSocketThread.threadMaster.get(i);
-    			Socket iteraSocket = stps.getSocket();
-    		
-    			try {
-    				BufferedWriter messagetoClientWt = new BufferedWriter(new OutputStreamWriter(iteraSocket.getOutputStream(), "UTF-8"));
-    				messagetoClientWt.write(EraserS + "\n");
-    				messagetoClientWt.flush();
-    			} catch (IOException e1) {
-    				// TODO Auto-generated catch block
-    				e1.printStackTrace();
-    			}
-    			
-    			System.out.println("Response, " + EraserS + ", has been sent!");
-            
-    		}
-            
+            if( ServerListeningSocketThread.threadMaster == null ) {
+            	Socket clientSocket = mainClient.clientStart.getClientSocket();
+            	try {
+            		BufferedWriter messagetoServerWt = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream(), "UTF-8"));
+            		messagetoServerWt.write(EraserS + '\n');
+            		messagetoServerWt.flush();
+
+            	} catch (IOException e1) {
+            		System.out.println(e1.getMessage());
+            	}
+            }
+            else{
+            	for(int i = 0; i < ServerListeningSocketThread.threadMaster.size(); i++) {
+            		SocketThreadPipeStructure stps = ServerListeningSocketThread.threadMaster.get(i);
+            		Socket iteraSocket = stps.getSocket();
+
+            		try {
+            			BufferedWriter messagetoClientWt = new BufferedWriter(new OutputStreamWriter(iteraSocket.getOutputStream(), "UTF-8"));
+            			messagetoClientWt.write(EraserS + "\n");
+            			messagetoClientWt.flush();
+            		} catch (IOException e1) {
+            			// TODO Auto-generated catch block
+            			e1.printStackTrace();
+            		}
+
+            		System.out.println("Response, " + EraserS + ", has been sent!");
+
+            	}
+            }
             
         }
     }

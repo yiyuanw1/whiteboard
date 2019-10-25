@@ -3,8 +3,10 @@
  */
 package whiteBoardServer;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -234,6 +236,9 @@ public class WhiteBoardServer {
 						
 						case "draw":{
 							String shapeS = cbufJSON.getString("shape");
+							int thick = cbufJSON.getInt("thick");
+							Graphics g = mainServer.f.getBufferedImage().getGraphics();
+							((Graphics2D) g).setStroke(new BasicStroke(thick));
 							switch(shapeS) {
 								case "Circle":{
 									//棣栧厛鍙戠粰鑷繁
@@ -243,7 +248,6 @@ public class WhiteBoardServer {
 									int y1 = cbufJSON.getInt("y1");
 									int colorHashcode = cbufJSON.getInt("color");
 
-									Graphics g = mainServer.f.getBufferedImage().getGraphics();
 									g.setColor(new Color(colorHashcode));
 
 							        int radius = Math.min(Math.abs(x0-x1), Math.abs(y0-y1));
@@ -273,7 +277,6 @@ public class WhiteBoardServer {
 									String text = cbufJSON.getString("text");
 									int colorHashcode = cbufJSON.getInt("color");
 									
-									Graphics g = mainServer.f.getBufferedImage().getGraphics();
 									g.setColor(new Color(colorHashcode));
 									
 									g.drawString(text, x0, y0);
@@ -302,7 +305,6 @@ public class WhiteBoardServer {
 									int y1 = cbufJSON.getInt("y1");
 									int colorHashcode = cbufJSON.getInt("color");
 
-									Graphics g = mainServer.f.getBufferedImage().getGraphics();
 									g.setColor(new Color(colorHashcode));
 									
 									int x = Math.min(x1, x0);
@@ -336,7 +338,6 @@ public class WhiteBoardServer {
 									int y1 = cbufJSON.getInt("y1");
 									int colorHashcode = cbufJSON.getInt("color");
 
-									Graphics g = mainServer.f.getBufferedImage().getGraphics();
 									g.setColor(new Color(colorHashcode));
 									
 									int x = Math.min(x1, x0);
@@ -368,7 +369,6 @@ public class WhiteBoardServer {
 									int y1 = cbufJSON.getInt("y1");
 									int colorHashcode = cbufJSON.getInt("color");
 
-									Graphics g = mainServer.f.getBufferedImage().getGraphics();
 									g.setColor(new Color(colorHashcode));
 									
 									g.drawLine(x0, y0, x1, y1);
@@ -397,7 +397,6 @@ public class WhiteBoardServer {
 									int y1 = cbufJSON.getInt("y1");
 									int colorHashcode = cbufJSON.getInt("color");
 
-									Graphics g = mainServer.f.getBufferedImage().getGraphics();
 									g.setColor(new Color(colorHashcode));
 									
 									g.drawLine(x0, y0, x1, y1);
@@ -429,10 +428,9 @@ public class WhiteBoardServer {
 										int size = cbufJSON.getInt("size");
 										int colorHashcode = cbufJSON.getInt("color");
 
-										Graphics g = mainServer.f.getBufferedImage().getGraphics();
 										g.setColor(new Color(colorHashcode));
-										
-							            g.fillRect(x, y, Math.abs(x1 - x0) + size, Math.abs(y1 - y0) + size);
+
+							            g.drawLine(x0, y0, x1,y1);
 								        mainServer.f.getPaintingSpace().repaint();
 								        
 								        //鍙戠粰鍒汉

@@ -34,6 +34,7 @@ public class Free extends AbstractTool {
         super.mouseDragged(e);
 
         Graphics g = getFrame().getBufferedImage().getGraphics();
+        ((Graphics2D) g).setStroke(new BasicStroke(thick));
         if (getX() > 0 && getY() > 0) {
             g.setColor(color);
             g.drawLine(getX(), getY(), e.getX(), e.getY());
@@ -49,6 +50,7 @@ public class Free extends AbstractTool {
             freeObj.put("y1", e.getY());
             freeObj.put("shape", "Free");
             freeObj.put("color", g.getColor().hashCode());
+            freeObj.put("thick", thick);
             String freeS = freeObj.toString();
             
             setX(e.getX());
