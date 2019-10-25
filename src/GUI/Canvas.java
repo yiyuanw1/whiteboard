@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.Locale;
 
 import static java.awt.Color.*;
 
@@ -96,7 +97,6 @@ public class Canvas extends JFrame {
         paintingSpace.addMouseListener(mouseListener);
         paintingSpace.addMouseWheelListener(mouseWheelListener);
 
-        this.setJMenuBar(createMenuBar());
         scroll = new JScrollPane(paintingSpace);
         ImageService.setViewport(scroll, paintingSpace, bufferedImage.getWidth(),
                 bufferedImage.getHeight());
@@ -168,22 +168,6 @@ public class Canvas extends JFrame {
         return panel;
     }
 
-
-    public JMenuBar createMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-        String[] menuItemArr = { "New", "Open", "Save", "Save As", "Exit" };
-        
-        JMenu menu = new JMenu("File");
-        for( int i = 0; i < menuItemArr.length; i++ ) {
-        	JMenuItem menuItem = new JMenuItem(menuItemArr[i]);
-        	menuItem.addActionListener(menuListener);
-        	menu.add(menuItem);
-        }
-        menuBar.add(menu);
-        return menuBar;
-    }
-
-
     public JPanel createPaintingSpace() {
         JPanel drawSpace = new DrawSpace();
         drawSpace.setPreferredSize(new Dimension((int) screenSize.getWidth(),
@@ -206,6 +190,17 @@ public class Canvas extends JFrame {
             toolBar.add(button);
 
         }
+        
+        JButton button = new JButton(new ImageIcon("resoruce/color.jpg"));
+        button.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				(new ColorFrame()).setVisible(true);
+			}
+        	
+        });
+        toolBar.add(button);
         panel.add(toolBar);
         return panel;
     }
